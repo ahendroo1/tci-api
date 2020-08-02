@@ -1,0 +1,411 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Sample MT4 WepApi Form</title>
+<link rel="stylesheet" type="text/css" href="view.css" media="all">
+
+    <script>
+      
+     
+    function selectmode(obj){
+        
+        if(obj.value==1) {
+			document.getElementById("grpup").style.display = 'block';
+            document.getElementById("leverage").style.display = 'block';
+            document.getElementById("changepassword").style.display = 'none'; 
+            document.getElementById("payment").style.display = 'none'; 
+            document.getElementById("internal").style.display = 'none';
+            document.getElementById("createMt4Account").style.display = 'none';
+        }
+        else if(obj.value==2) {
+            document.getElementById("changepassword").style.display = 'block'; 
+            document.getElementById("leverage").style.display = 'none';
+            document.getElementById("payment").style.display = 'none'; 
+            document.getElementById("internal").style.display = 'none';
+            document.getElementById("createMt4Account").style.display = 'none';
+        }
+        else if(obj.value==3) {
+            document.getElementById("payment").style.display = 'block';
+            document.getElementById("changepassword").style.display = 'none';
+            document.getElementById("leverage").style.display = 'none';
+            document.getElementById("internal").style.display = 'none';
+            document.getElementById("createMt4Account").style.display = 'none';
+
+        }
+        else if(obj.value==5) {
+            document.getElementById("createMt4Account").style.display = 'block';
+            document.getElementById("payment").style.display = 'none';
+            document.getElementById("changepassword").style.display = 'none';
+            document.getElementById("leverage").style.display = 'none';
+            document.getElementById("internal").style.display = 'none';
+
+        }
+        else {
+            document.getElementById("internal").style.display = 'block'; 
+            document.getElementById("payment").style.display = 'none'; 
+            document.getElementById("changepassword").style.display = 'none'; 
+            document.getElementById("leverage").style.display = 'none';
+            document.getElementById("createMt4Account").style.display = 'none';
+        }
+    }
+        
+        function myAjax() {
+            
+            var xmlHttp = new XMLHttpRequest();
+            var url="form.php";
+            var login = document.getElementsByName("login")[0].value;
+            var password = document.getElementsByName("password")[0].value;
+            var parameters = "login="+login+"&password="+password;
+            var modes = document.getElementsByName('mode');
+
+            if (modes[0].checked) {
+                parameters+="&mode="+modes[0].value+"&leverage="+document.getElementsByName("leverage")[0].value+"&group="+document.getElementsByName("group")[0].value;
+            }
+            else if(modes[1].checked) {
+                parameters+="&mode="+modes[1].value+"&newpassword="+document.getElementsByName("newpassword")[0].value;
+                var passtype = document.getElementsByName('passtype');
+                if(passtype[0].checked)
+                    parameters+="&passtype=0";
+                else
+                    parameters+="&passtype=1";
+            }
+            else if(modes[2].checked) {
+                parameters+="&mode="+modes[2].value+"&amount1="+document.getElementsByName("amount1")[0].value;
+                var paymenttype = document.getElementsByName('paymenttype');
+                if(paymenttype[0].checked)
+                    parameters+="&paymenttype=0";
+                else if(paymenttype[1].checked)
+                    parameters+="&paymenttype=1";
+                else if(paymenttype[2].checked)
+		    parameters+="&paymenttype=2";
+                else
+		    parameters+="&paymenttype=3";
+                parameters+="&comment1="+document.getElementsByName("comment1")[0].value;
+            }
+            else if(modes[3].checked) {
+                parameters+="&mode="+modes[3].value+"&toaccount="+document.getElementsByName("toaccount")[0].value;
+                parameters+="&amount2="+document.getElementsByName("amount2")[0].value;
+            }
+            else {
+            
+                parameters+="&mode=6";
+                
+                parameters+="&name="+ document.getElementsByName("name")[0].value;
+                
+               parameters+="&group="+ document.getElementsByName("group")[0].value;
+                parameters+="&password="+ document.getElementsByName("password1")[0].value;
+                parameters+="&investor_password="+ document.getElementsByName("investor")[0].value;
+                parameters+="&email="+ document.getElementsByName("email")[0].value;
+                parameters+="&country="+ document.getElementsByName("country")[0].value;
+                
+                parameters+="&city="+ document.getElementsByName("city")[0].value;
+                parameters+="&state="+ document.getElementsByName("state")[0].value;
+                parameters+="&address="+ document.getElementsByName("address")[0].value;
+                parameters+="&phone="+ document.getElementsByName("phone")[0].value;
+                parameters+="&phone_password="+ document.getElementsByName("phone_password")[0].value;
+                parameters+="&zipcode="+ document.getElementsByName("zipcode")[0].value;
+                parameters+="&leverage="+ document.getElementsByName("leverage")[0].value;
+                parameters+="&agent="+ document.getElementsByName("agent")[0].value;
+                parameters+="&deposit="+ document.getElementsByName("initial_deposit_for_demo_account")[0].value;
+                
+            }
+            
+            
+             xmlHttp.open("POST", url, true);
+             xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+             xmlHttp.onreadystatechange = function() {
+              if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+               document.getElementById('ajaxDump').innerHTML=xmlHttp.responseText+"<br />";
+              }
+             }
+             xmlHttp.send(parameters);
+            
+        }
+    
+    </script>
+
+</head>
+<body id="main_body" >
+	<img id="top" src="top.png" alt="">
+	<div id="form_container">
+		<h1>Sample MT4 WepApi Form</h1>
+		<form class="appnitro"  method="post" >
+            <div class="form_description">
+		<p>This form is For Demonstration purposes only. check cfg.php file to configure your MT4 server.</p>
+	    </div>						
+         
+            <ul>
+                <li>
+                    <label class="description">Login </label>
+                    <div>
+                        <input name="login" class="element text medium" type="text" maxlength="255" value=""/> 
+                    </div> 
+		        </li>
+                <li>
+                    <label class="description">Password</label><i>optional</i>
+                    <div>
+                        <input name="password" class="element text medium" type="password" maxlength="255" value=""/> 
+                    </div> 
+                </li>
+                <li>
+                   <label for="mode_1">
+                       <input type="radio" id="mode_1" name="mode" value="1" onclick="selectmode(this);" checked="checked" />Leverage
+                   </label>
+                    <label for="mode_2">
+                        <input type="radio" id="mode_2" name="mode" value="2" onclick="selectmode(this);"/>Change Password
+                    </label>
+                    <label for="mode_3">
+                        <input type="radio" id="mode_3" name="mode" value="3" onclick="selectmode(this);"/>Payment
+                    </label>
+                    <label for="mode_4">
+                        <input type="radio" id="mode_4" name="mode" value="4" onclick="selectmode(this);"/>Internal Transfer
+                    </label>
+                    <label for="mode_5">
+                        <input type="radio" id="mode_5" name="mode" value="5" onclick="selectmode(this);"/>Create Mt4 Account
+                    </label>
+                </li>
+                
+                <li><br></li>
+                 
+                    
+                <div id="leverage">
+					<li>
+                        <label class="description">Group</label>
+                        <div>
+                            <input name="group" class="element text medium" maxlength="255" value=""/> 
+                        </div> 
+                    </li>
+                    <li>
+                        <label class="description">Leverage </label>
+                        <div>
+                            <select class="element select medium" name="leverage"> 
+                                <option value="100"  selected="selected">1:100</option>
+                                <option value="200" >1:200</option>
+                                <option value="500" >1:500</option>
+                            </select>
+                        </div> 
+                    </li>
+                </div>
+
+                <div id="changepassword">
+                    <li>
+                        <label class="description">New Password</label>
+                        <div>
+                            <input name="newpassword" class="element text medium" type="password" maxlength="255" value=""/> 
+                        </div> 
+                    </li>
+                    <li>
+                        <input type="radio" name="passtype" value="0" checked="checked"/>Master
+                        <input type="radio" name="passtype" value="1" />Investor
+                    </li>
+                </div>
+                
+                  <div id="payment">
+                    <li>
+                        <label class="description">Amount</label>
+                        <div>
+                            <input name="amount1" class="element text medium" type="text" maxlength="255" value=""/> 
+                        </div> 
+                    </li>
+                    <li>
+                        <input type="radio" name="paymenttype" value="0" checked="checked"/>Deposit
+                        <input type="radio" name="paymenttype" value="1" />Withdraw
+                        <input type="radio" name="paymenttype" value="2" />Credit In
+                        <input type="radio" name="paymenttype" value="3" />Credit Out
+                    </li>
+                      <li>
+                        <label class="description">Comment</label>
+                        <div>
+                            <input name="comment1" class="element text medium" type="text" maxlength="255" value=""/> 
+                        </div> 
+                    </li>
+                </div>
+                
+                <div id="internal">
+                    <li> 
+                        <label class="description">Transfer To</label>
+                        <div>
+                            <input name="toaccount" class="element text medium" type="text" maxlength="255" value=""/> 
+                        </div> 
+                    </li>
+                     <li>
+                        <label class="description">Amount</label>
+                        <div>
+                            <input name="amount2" class="element text medium" type="text" maxlength="255" value=""/> 
+                        </div> 
+                    </li>
+                </div>
+
+
+
+                <div id="createMt4Account">
+                    <li>
+                        <label class="description">group</label>
+                        <div>
+                            <select name="group" class="element select medium" >
+                                <option value="1">Group1</option>
+                                <option value="2">Group2</option>
+                                <option value="3">Group3</option>
+                                </select>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">name</label>
+                        <div>
+                            <input name="name" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">password</label>
+                        <div>
+                            <input name="password1" class="element text medium" type="password" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">investor</label>
+                        <div>
+                            <input name="investor" class="element text medium" type="password" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">email</label>
+                        <div>
+                            <input name="email" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">country</label>
+                        <div>
+                            <select name="country" class="element select medium" >
+                                <option value="Jordan">Jordan</option>
+                                <option value="China">China</option>
+                                <option value="US">US</option>
+                            </select>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">state</label>
+                        <div>
+                            <input name="state" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">city</label>
+                        <div>
+                            <input name="city" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">address</label>
+                        <div>
+                            <input name="address" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">comment</label>
+                        <div>
+                            <input name="comment" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">phone</label>
+                        <div>
+                            <input name="phone" class="element text medium" type="tel" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">phone password</label>
+                        <div>
+                            <input name="phone_password" class="element text medium" type="password" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+
+
+                    <li>
+                        <label class="description">status</label>
+                        <div>
+                            <input name="status" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+                    <li>
+                        <label class="description">zipcode</label>
+                        <div>
+                            <input name="zipcode" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+
+                    <li>
+                        <label class="description">leverage</label>
+                        <div>
+                            <select name="leverage" class="element select medium" >
+                                <option value="50">1:50</option>
+                                <option value="100" default>1:100</option>
+                                <option value="200">1:200</option>
+                                <option value="500">1:500</option>
+                            </select>
+                        </div>
+                    </li>
+
+
+                    <li>
+                        <label class="description">agent</label>
+                        <div>
+                            <input name="agent" class="element text medium" type="text" maxlength="255" value=""/>
+                        </div>
+                    </li>
+
+
+                    <li>
+                        <label class="description">&ensp;</label>
+                        <div>
+
+                            <label class="description"> <input name="send_reports" class="description"  type="checkbox"   value="1"/>send reports</label>
+
+                        </div>
+                    </li>
+
+
+
+                    <li>
+                        <label class="description">initial deposit for demo account</label>
+                        <div>
+                            <select name="initial_deposit_for_demo_account" >
+                                <option value="1000">1000</option>
+                                <option value="5000">5000</option>
+                                <option value="10000">10000</option>
+                                <option value="1000000">1000000</option>
+                            </select>
+                        </div>
+                    </li>
+
+                </div>
+
+
+                <li class="buttons">
+		       <input id="saveForm"  type="submit" name="submit" value="Submit" onclick="myAjax();return false" />
+                </li>
+			</ul>
+		</form>	
+        <center>
+        <h2 id="ajaxDump"></h2>
+            </center>
+	</div>
+	<img id="bottom" src="bottom.png" alt="">
+</body>
+</html>
